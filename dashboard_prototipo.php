@@ -12,13 +12,13 @@
     $res_sen = $mysqli->query($sql);
 
     $sql = "SELECT * FROM actuador WHERE eliminado = 0";
-    $res_act = $mysqli->query($sql);
-    
+    $res_act = $mysqli->query($sql);  
 ?>
 
 <!doctype html>
 <html lang="es">
 <head>
+  <meta http-equiv="refresh" content="2" > 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard Prototipo</title>
@@ -56,27 +56,38 @@
         </div>
       </div> -->
     </div>
-
     <div class="row g-3 mt-3">
+      <?php while ($fila = $res_act->fetch_assoc()) { ?>
       <div class="col-md-6">
         <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title text-muted">Actuador 1 — Bomba</h5>
+            <h5 class="card-title text-muted">Actuador <?=$fila["id"]?> — <?=$fila["tipo"]?></h5>
+            <?php if($fila["estado"] == 0) { ?>
             <span class="badge bg-secondary fs-6">OFF</span>
+            <?php }
+            elseif($fila["estado"] == 1) { ?>
+            <span class="badge bg-success fs-6">ON</span>
+            <?php } 
+            else { ?>
+            <span class="badge bg-danger fs-6">ERROR</span>
+            <?php } ?>
+
+            
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <?php } ?>
+      <!--<div class="col-md-6">
         <div class="card text-center">
           <div class="card-body">
             <h5 class="card-title text-muted">Actuador 2 — Válvula</h5>
             <span class="badge bg-success fs-6">ON</span>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
-    <footer class="text-center text-muted mt-4 small">Prototipo — Estado actual mostrado sin conexión</footer>
+    <footer class="text-center text-muted mt-4 small">Prototipo — Estado actual mostrado sin conexión a servidor, pero con conexión y actualización con la base de datos</footer>
   </div>
 </body>
 </html>
