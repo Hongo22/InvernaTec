@@ -55,15 +55,8 @@ try {
         $sql_unit = "SELECT unidades FROM sensor WHERE id = {$sensor_id} ORDER BY id DESC LIMIT 1";
 
         $res = $mysqli->query($sql);
-        if ($res === false) {
-            error_log("Query error (lecturas sensor {$sensor_id}): " . $mysqli->error);
-            return null;
-        }
         $unit = $mysqli->query($sql_unit);
-        if ($unit === false) {
-            error_log("Query error (unidades sensor {$sensor_id}): " . $mysqli->error);
-        }
-
+        
         $row = $res->fetch_assoc();
         $row_u = ($unit && method_exists($unit, 'fetch_assoc')) ? $unit->fetch_assoc() : null;
         if (!$row) return null;
@@ -78,7 +71,7 @@ try {
             'id' => isset($row['id']) ? intval($row['id']) : null,
             'valor' => isset($row['valor']) ? $row['valor'] : (isset($row['value']) ? $row['value'] : null),
             'unidades' => isset($row_u['unidades']) ? $row_u['unidades'] : (isset($row_u['units']) ? $row_u['units'] : null),
-            'ultima_act' => $ultima
+            'ultima_act' => isset($row['hora']) ? $row['hora'] : (isset($row['hora']) ? $row['hora'] : null)
         ];
     }
 

@@ -93,7 +93,7 @@ while ($fila = $res_sen->fetch_assoc()) {
 </div>
 <label class="small" id="act<?=$fila["id"]?>_state">OFF</label>
 <div class="toggle">
-    <button class="btn secondary" onclick="toggleActuator('actuator_<?=$fila["id"]?>')">Toggle</button>
+    <button class="btn secondary" onclick="toggleActuator('actuator_<?=$fila['id']?>')">Toggle</button>
 </div>
 </div>
 <?php } ?>

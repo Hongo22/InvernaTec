@@ -23,7 +23,7 @@ PHP_URL = "http://localhost/InvernaTec/api_data.php"   # <-- change if needed
 
 def on_connect(client, userdata, flags, rc):
     print("MQTT conectado, rc=", rc)
-    client.subscribe("ac/prueba")
+    client.subscribe("ac/sensor")
 
 
 def on_message(client, userdata, msg):
