@@ -9,22 +9,17 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="tabla_cultivo.php">Cultivos</a>
+                  <a class="nav-link active" aria-current="page" href="dashboard_prototipo.php">Dashboard</a>
              </li>
-             <li class="nav-item">
-                <a class="nav-link" href="tabla_invernadero.php">Invernaderos</a>
-             </li>
-             <li class="nav-item">
-                <a class="nav-link" href="tabla_sensor.php">Sensores</a>
-             </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="tabla_actuador.php">Actuadores</a>
-               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                   Dropdown
+                   Tablas
                 </a>
                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="tabla_invernadero.php">Invernaderos</a></li>
+                  <li><a class="dropdown-item" href="tabla_cultivo.php">Cultivos</a></li>
+                  <li><a class="dropdown-item" href="tabla_sensor.php">Sensores</a></li>
+                  <li><a class="dropdown-item" href="tabla_actuador.php">Actuadores</a></li>
                   <li><a class="dropdown-item" href="tabla_lectura.php">Lecturas</a></li>
                   <li><a class="dropdown-item" href="tabla_accion.php">Acciones</a></li>
                 </ul>

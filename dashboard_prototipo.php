@@ -123,8 +123,8 @@ const chart1 = new Chart(ctx1,{
 });
 
 const chart2 = new Chart(ctx2,{
-    type:'line',
-    data:{labels:[],datasets:[{label:'Hum',data:[],tension:0.4,pointRadius:4}]},
+    type:'bar',
+    data:{labels:[],datasets:[{label:'Temp',data:[]}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
 });
 
@@ -145,10 +145,7 @@ function updateChart(chart,arr){
     chart.update();
 }
 
-function updateThermo(chart,value){
-    chart.data.datasets[0].data[0] = value;
-    chart.update();
-}
+
 
 async function fetchSensors(s1, s2, s3){
     document.getElementById('sensor1_value').textContent = s1.valor + ' ' + s1.unidades;
