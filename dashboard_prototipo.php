@@ -122,11 +122,42 @@ const chart1 = new Chart(ctx1,{
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
 });
 
-const chart2 = new Chart(ctx2,{
-    type:'bar',
-    data:{labels:[],datasets:[{label:'Temp',data:[]}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
+const chart2 = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: [""],    // optional, empty label
+        datasets: [{
+            label: 'Temp',
+            data: [0],    // one bar
+            borderRadius: 12,     // ROUND EDGES
+            backgroundColor: 'red'  // or any color
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        scales: {
+            x: {
+                display: false,   // remove axis
+                grid: { display: false }
+            },
+            y: {
+                display: false,   // remove axis
+                grid: { display: false },
+                min: 5,           // set your scale
+                max: 35
+            }
+        },
+
+        plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
+        }
+    }
 });
+
+
 
 const chart3 = new Chart(ctx3,{
     type:'line',
@@ -142,6 +173,13 @@ function pushHistory(arr,val){
 function updateChart(chart,arr){
     chart.data.labels = arr.map((_,i)=>i);
     chart.data.datasets[0].data = arr;
+    chart.update();
+}
+
+function updateBar(chart, value)
+{
+  chart.data.labels = ["Current"];
+    chart.data.datasets[0].data = [value];
     chart.update();
 }
 
@@ -162,7 +200,7 @@ async function fetchSensors(s1, s2, s3){
     pushHistory(history3,s3.valor);
 
     updateChart(chart1,history1);
-    updateChart(chart2,history2);
+    updateBar(chart2,s2.valor);
     updateChart(chart3,history3);
 }
 
