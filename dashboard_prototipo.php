@@ -130,7 +130,8 @@ const chart2 = new Chart(ctx2, {
             label: 'Temp',
             data: [0],    // one bar
             borderRadius: 12,     // ROUND EDGES
-            backgroundColor: 'red'  // or any color
+            backgroundColor: 'red',  // or any color
+            barThickness : 75
         }]
     },
     options: {
