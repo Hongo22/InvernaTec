@@ -8,7 +8,8 @@ $sql = "SELECT * FROM sensor WHERE eliminado = 0";
 $res_sen = $mysqli->query($sql);
 
 $sql = "SELECT * FROM actuador WHERE eliminado = 0";
-$res_act = $mysqli->query($sql);
+$res_act_admin = $mysqli->query($sql);
+$res_act_user  = $mysqli->query($sql);
 ?>
 <!doctype html>
 <html lang="es">
@@ -17,11 +18,13 @@ $res_act = $mysqli->query($sql);
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Prototipo Dashboard — 2 sensores / 2 actuadores</title>
 
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 <!-- in <head> -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
 
 
@@ -56,7 +59,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 <div class="container">
 <header>
 <div class="brand"><h1>Dashboard</h1></div>
-<button class="btn" id="refreshBtn"><i class="fa-solid fa-arrows-rotate"></i> Actualizar</button>
+<button class="btn" onclick="event.preventDefault(); changeuser()"><i class="fa-solid fa-arrows-rotate"></i>Cambiar Usuario</button>
 </header>
 
 <main class="grid grid-3">
@@ -93,6 +96,10 @@ while ($fila = $res_sen->fetch_assoc()) {
         <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Line</a>
         <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'progress')">Progress</a>
         <?php } ?>
+        <?php if ($fila["id"] == 4) { ?>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Line</a>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'gauge')">Gauge</a>
+        <?php } ?>
       </ul>
     </div>
   </header>
@@ -112,30 +119,88 @@ while ($fila = $res_sen->fetch_assoc()) {
 <?php } } ?>
 </div>
 
-<aside style="display:flex;flex-direction:column;gap:16px">
-<div class="card">
-<h3>Actuadores</h3>
-<div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
-<?php while ($fila = $res_act->fetch_assoc()) { ?>
-<div class="actuator">
-<div>
-    <div class="muted">Actuador <?=$fila["id"]?></div>
-    <div class="small"><?=$fila["tipo"]?></div>
+
+<div id="adminView" style="display: none;" >
+    <aside style="display:flex;flex-direction:column;gap:16px">
+        <?php while ($fila = $res_act_admin->fetch_assoc()) { ?>
+        <div class="card">
+            <h3>Actuador #<?=$fila["id"]?></h3>
+            <div style="margin-top:12px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px">
+                <div class="actuator">
+                    <div>
+                        <div><?=$fila["tipo"]?></div>
+                    </div>
+                    <?php if ($fila["estado"] == 0) {?>
+                    <div class="toggle" style="margin-right: 150px;">
+                        <label class="small" id="act<?=$fila["id"]?>_state">OFFLINE</label>
+                    </div>
+                    <?php } ?>
+                    <?php if ($fila["estado"] == 1) {?>
+                    <div class="toggle" style="margin-right: 175px;">
+                        <label class="small" id="act<?=$fila["id"]?>_state">ONLINE</label>
+                    </div>
+                    <?php } ?>
+                    <?php if ($fila["id"] == 1) {?>
+                    <div class="toggle">
+                        <button class="btn secondary" onclick="toggleActuator('<?=$fila['id']?>')">Bomba</button>
+                    </div>
+                    <?php } ?>
+                    <?php if ($fila["id"] == 2) { ?>
+                    <div class="toggle">
+                        <button class="btn secondary" onclick="toggleActuator('<?=$fila['id']?>')">Frío</button>
+                    </div>
+                    <div class="toggle">
+                        <button class="btn secondary" onclick="toggleActuator('<?=$fila['id']+1?>')">Caliente</button>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+    </aside>
 </div>
-<label class="small" id="act<?=$fila["id"]?>_state">OFF</label>
-<div class="toggle">
-    <button class="btn secondary" onclick="toggleActuator('actuator_<?=$fila['id']?>')">Toggle</button>
+
+<div id="userView" style="display: none;" >
+    <aside style="display:flex;flex-direction:column;gap:16px">
+        <?php while ($fila = $res_act_user->fetch_assoc()) { ?>
+        <div class="card">
+            <h3>Actuador #<?=$fila["id"]?></h3>
+            <div style="margin-top:12px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px">
+                <div class="actuator">
+                    <div>
+                        <div><?=$fila["tipo"]?></div>
+                    </div>
+                    <label class="small" id="act<?=$fila["id"]?>_state">OFFLINE</label>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+    </aside>
 </div>
-</div>
-<?php } ?>
-</div>
-</div>
-</aside>
 
 </main>
 </div>
 
 <script>
+
+user = "admin";
+
+function changeuser()
+{
+    document.getElementById(user + "View").style.display = "none";
+    if (user == "admin")
+    {
+        user = "user";
+    }
+    else if (user == "user")
+    {
+        user = "admin";
+    }
+    document.getElementById(user + "View").style.display = "block";
+}
+
+document.getElementById(user + "View").style.display = "block";
+
 const charts = {};
 const histories = {};
 const maxPoints = 30;
@@ -181,11 +246,79 @@ function updateProgressById(id, value){
     chart.update();
 }
 
+function drawGauge(g, value){
+    const canvas = g.canvas;
+    const ctx = canvas.getContext("2d");
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height;
+    const radius = 120;
+
+    const gradientg = ctx.createLinearGradient(0, 0, 300, 0);
+    gradientg.addColorStop(0, "#00b309ff");
+    gradientg.addColorStop(0.5, "#ffd000ff");
+    gradientg.addColorStop(1, "#e20000bb");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Background arc
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+    ctx.strokeStyle = gradientg;
+    ctx.arc(centerX, centerY, radius, Math.PI, 0, false);
+    ctx.stroke();
+
+    // Value arc
+    const angle = Math.PI * (value / 7);
+
+    // Needle
+    const needleAngle = Math.PI + angle;
+    const nx = centerX + Math.cos(needleAngle) * (radius - 20);
+    const ny = centerY + Math.sin(needleAngle) * (radius - 20);
+
+    ctx.beginPath();
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 4;
+    ctx.moveTo(centerX, centerY);
+    ctx.lineTo(nx, ny);
+    ctx.stroke();
+}
+
+// === UPDATE GAUGE ===
+function updateGaugeById(id, newValue){
+    const gauge = charts[id];
+    if(!gauge || gauge.type !== "gauge") return;
+
+    const start = gauge.value || 0;
+    const end = Math.max(0, Math.min(100, newValue));
+    const duration = 500; // ms
+    const startTime = performance.now();
+
+    function animate(now){
+        const progress = Math.min((now - startTime) / duration, 1);
+        const current = start + (end - start) * progress;
+
+        drawGauge(gauge, current);
+
+        if(progress < 1){
+            requestAnimationFrame(animate);
+        } else {
+            gauge.value = end; // final store
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
 
 function setChartType(id, type) {
     const chart = charts[id];
     if(!chart) return;
-    const oldData = JSON.parse(JSON.stringify(chart.config.data));
+
+    let oldData = null;
+    if (chart && chart.config) {
+        oldData = JSON.parse(JSON.stringify(chart.config.data));
+    }
+
     const values = histories[id] ?? []; 
     const labels = histories[id].map((_, i) => i);
 
@@ -193,7 +326,9 @@ function setChartType(id, type) {
     canvas.width = canvas.width;
     const ctx = canvas.getContext("2d");
 
-    chart.destroy();
+    if (chart && chart.destroy) {
+        chart.destroy();
+    }
 
   if (type == 'bar')
   {
@@ -221,7 +356,7 @@ function setChartType(id, type) {
             maintainAspectRatio: false,
             scales: {
                 x: { display: false, grid: { display: false } },
-                y: { display: false, grid: { display: false }, min: 5, max: 35 }
+                y: { display: false, grid: { display: false }, min: 20, max: 29 }
             },
             plugins: { legend: { display: false }, tooltip: { enabled: false } }
         }
@@ -284,9 +419,22 @@ function setChartType(id, type) {
         }
     });
   }
+  else if (type == 'gauge')
+  {
+    const lastValue = histories[id]?.length ? histories[id][histories[id].length - 1] : 0;
+    const v = Math.max(0, Math.min(100, lastValue));
+
+    charts[id] = {
+        type: "gauge",
+        canvas: canvas,
+        value: v
+    };
+
+    drawGauge(charts[id], v);
+  }
   else {
       charts[id] = new Chart(ctx, {
-          type: type,
+          type: 'line',
           data: {
               labels: labels,
               datasets: [{
@@ -360,25 +508,38 @@ async function fetchSensorsLongPolling(){
 
             const valueEl = document.getElementById('sensor' + id + '_value');
             const updateEl = document.getElementById('sensor' + id + '_update');
-            if(valueEl) valueEl.textContent = s.valor + ' ' + (s.unidades || '');
-            if(updateEl) updateEl.textContent = 'Última actualiz.: ' + new Date(s.ultima_act).toLocaleTimeString();
+
+            if (valueEl) valueEl.textContent = s.valor + ' ' + (s.unidades || '');
+            if (updateEl) updateEl.textContent = 'Última actualiz.: ' + new Date(s.ultima_act).toLocaleTimeString();
+
+            // ⭐ NEW PART — Update color dynamically:
+            const card = valueEl.closest('.card, .card_valid, .card_error');
+            if (card) {
+                card.className =
+                    s.estado == 0 ? "card" :
+                    s.estado == 1 ? "card_valid" :
+                                    "card_error";
+            }
 
             pushHistory(id, s.valor);
 
             const chart = charts[id];
             if(chart){
-                if (chart.config.type === 'bar' && chart.config.data.datasets.length === 1) {
-                    updateBarById(id, s.valor);  // normal bar
+                if (chart.type === "gauge") {
+                    updateGaugeById(id, s.valor);
                 }
-                else if (chart.config.type === 'bar' && chart.config.data.datasets.length === 2) {
-                    updateProgressById(id, s.valor); // progress bar
+                else if (chart.config?.type === 'bar' && chart.config.data.datasets.length === 1) {
+                    updateBarById(id, s.valor);
+                }
+                else if (chart.config?.type === 'bar' && chart.config.data.datasets.length === 2) {
+                    updateProgressById(id, s.valor);
                 }
                 else {
                     updateChartById(id);
                 }
             }
+            console.log("sensor", id, s);
         }
-
     }catch(e){
         console.error("Connection error:",e);
     }
@@ -388,6 +549,59 @@ async function fetchSensorsLongPolling(){
 
 let lastId = 0;
 fetchSensorsLongPolling();
+
+function toggleActuator(a) {
+
+    url = "http://127.0.0.1:5000/toggle";
+
+
+    if (a == 1)
+    {
+        fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ value: "bomba"})
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Python server response:", data);
+        })
+        .catch(err => {
+            console.error("Error sending to Python:", err);
+        });
+    }
+    if (a == 2)
+    {
+        fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ value: "frio"})
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Python server response:", data);
+        })
+        .catch(err => {
+            console.error("Error sending to Python:", err);
+        });
+    }
+    if (a == 3)
+    {
+        fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ value: "caliente"})
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Python server response:", data);
+        })
+        .catch(err => {
+            console.error("Error sending to Python:", err);
+        });
+    }
+}
+
 </script>
 <!-- right before </body> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

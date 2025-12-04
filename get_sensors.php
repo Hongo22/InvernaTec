@@ -53,12 +53,15 @@ try {
         $sensor_id = intval($sensor_id);
         $sql = "SELECT * FROM lecturas WHERE id_sensor = {$sensor_id} ORDER BY id DESC LIMIT 1";
         $sql_unit = "SELECT unidades FROM sensor WHERE id = {$sensor_id} ORDER BY id DESC LIMIT 1";
+        $sql_state = "SELECT estado FROM sensor WHERE id = {$sensor_id} ORDER BY id DESC LIMIT 1";
 
         $res = $mysqli->query($sql);
         $unit = $mysqli->query($sql_unit);
+        $state = $mysqli->query($sql_state);
         
         $row = $res->fetch_assoc();
         $row_u = ($unit && method_exists($unit, 'fetch_assoc')) ? $unit->fetch_assoc() : null;
+        $row_e = ($state && method_exists($unit, 'fetch_assoc')) ? $state->fetch_assoc() : null;
         if (!$row) return null;
 
         $ultima = null;
@@ -71,16 +74,18 @@ try {
             'id' => isset($row['id']) ? intval($row['id']) : null,
             'valor' => isset($row['valor']) ? $row['valor'] : (isset($row['value']) ? $row['value'] : null),
             'unidades' => isset($row_u['unidades']) ? $row_u['unidades'] : (isset($row_u['units']) ? $row_u['units'] : null),
-            'ultima_act' => isset($row['hora']) ? $row['hora'] : (isset($row['hora']) ? $row['hora'] : null)
+            'ultima_act' => isset($row['hora']) ? $row['hora'] : (isset($row['hora']) ? $row['hora'] : null),
+            'estado' => isset($row_e['estado']) ? $row_e['estado'] : (isset($row_e['estado']) ? $row_e['estado'] : null)
         ];
     }
 
     $s1 = fetch_latest($mysqli, 1);
     $s2 = fetch_latest($mysqli, 2);
     $s3 = fetch_latest($mysqli, 3);
+    $s4 = fetch_latest($mysqli, 4);
 
     $last_id = 0;
-    foreach ([$s1, $s2, $s3] as $r) {
+    foreach ([$s1, $s2, $s3, $s4] as $r) {
         if ($r && isset($r['id']) && $r['id'] !== null) {
             $last_id = max($last_id, intval($r['id']));
         }
@@ -92,7 +97,8 @@ try {
         'lecturas' => [
             'sensor_1' => $s1,
             'sensor_2' => $s2,
-            'sensor_3' => $s3
+            'sensor_3' => $s3,
+            'sensor_4' => $s4
         ]
     ];
 

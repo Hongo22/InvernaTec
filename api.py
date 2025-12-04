@@ -1,12 +1,19 @@
-from flask import Flask, jsonify, render_template_string
+from flask import Flask, jsonify, render_template_string, request
 from datetime import datetime
 import locale
 import json
 import requests     # <-- needed to POST to PHP
 import paho.mqtt.client as mqtt
+from paho.mqtt import publish
 import threading
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
+MQTT_HOST = "test.mosquitto.org"
+MQTT_PORT = 1883
+MQTT_TOPIC = "ac/actuador"
 
 # Configura el idioma español
 try:
@@ -73,13 +80,24 @@ def message_to_json(msg_dict):
         out["payload_type"] = "text"
     return out
 
+def publish_to_mqtt(message):
+    client = mqtt.Client()
+    client.connect(MQTT_HOST, MQTT_PORT, 60)
+    client.publish("ac/act", message)
+    client.disconnect()
+
+@app.route("/toggle", methods=["POST"])
+def toggle():
+    value = request.json.get("value", "0")
+    publish.single("ac/actuador", value, hostname="test.mosquitto.org", port=1883)
+    return jsonify({"status": "OK", "sent": value})
 
 if __name__ == '__main__':
     mqtt_client = mqtt.Client()
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = on_message
 
-    mqtt_client.connect("broker.mqtt.cool", 1883, 60)
+    mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
     mqtt_client.loop_start()
 
     app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
