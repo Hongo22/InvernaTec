@@ -17,12 +17,9 @@
     </head>
     <body>
         <?php include "layout.php"; ?>
-        <div class = "container text-center">
+        <div class = "container text-center" style="margin-bottom:30px;">
             <div class="col mb-1">
                 <h1>Actuadores</h1>
-            </div>
-            <div class="col mb-12" style="margin-left: 1100px; margin-bottom: 15px;">
-                <a href="(archivo).php" class="btn btn-outline-success">Nuevo Actuador</a>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -30,12 +27,9 @@
                 <table class="table table-responsive table-bordered">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Tipo</th>
+                            <th scope="col">#</th>
+                            <th scope="col">Actuador</th>
                             <th scope="col">Modelo</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">ID de Invernadero</th>
-                            <th scope="col">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,22 +38,6 @@
                             <td><?=$fila["id"]?></td>
                             <td><?=$fila["tipo"]?></td>
                             <td><?=$fila["modelo"]?></td>
-                            <td><?=$fila["estado"]?></td>
-                            <td><?=$fila["id_inv"]?></td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <a href="(archivo).php?id=<?=$fila['id']?>" class="btn btn-outline-primary">Editar</a>
-                                    <div class="dropdown">
-                                        <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Crear
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="(archivo).php?id=<?=$fila['id']?>">Placeholder</a></li>
-                                        </ul>
-                                    </div>
-                                    <a href="(archivo).php?id=<?=$fila['id']?>" class="btn btn-outline-danger">Eliminar</a>
-                                </div>
-                            </td>
                         </tr>
                         <?php } ?>
                     </tbody>

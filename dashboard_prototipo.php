@@ -16,7 +16,7 @@ $res_act_user  = $mysqli->query($sql);
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Prototipo Dashboard — 2 sensores / 2 actuadores</title>
+<title>Dashboard</title>
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -54,12 +54,73 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 
 <body>
 
-<?php include "layout.php"; ?>
+<div id="userViewLayout" style="display: none;" >
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<div  style="margin-bottom: 15px;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">InvernaTec</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="dashboard_prototipo.php">Dashboard</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe6uhqIud1jbG0UfOZv0HU16AgE8TMzOLO2wCNLyr83w&s" class="rounded float-end" width="50" height="50">
+        </form>
+      </div>
+    </div>
+  </nav>
+</div>
+</div>
+
+
+<div id="adminViewLayout" style="display: none;" >
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<div  style="margin-bottom: 15px;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">InvernaTec</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="dashboard_prototipo.php">Dashboard</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Tablas
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="tabla_invernadero.php">Invernaderos</a></li>
+              <li><a class="dropdown-item" href="tabla_cultivo.php">Cultivos</a></li>
+              <li><a class="dropdown-item" href="tabla_sensor.php">Sensores</a></li>
+              <li><a class="dropdown-item" href="tabla_actuador.php">Actuadores</a></li>
+            </ul>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe6uhqIud1jbG0UfOZv0HU16AgE8TMzOLO2wCNLyr83w&s" class="rounded float-end" width="50" height="50">
+        </form>
+      </div>
+    </div>
+  </nav>
+</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 <div class="container">
 <header>
-<div class="brand"><h1>Dashboard</h1></div>
-<button class="btn" onclick="event.preventDefault(); changeuser()"><i class="fa-solid fa-arrows-rotate"></i>Cambiar Usuario</button>
+<div class="brand" style="margin-bottom:20px;"><h1>Dashboard</h1></div>
+<button class="btn btn-outline-success" onclick="event.preventDefault(); changeuser()"><i class="fa-solid fa-arrows-rotate"></i>  Cambiar Usuario</button>
 </header>
 
 <main class="grid grid-3">
@@ -77,28 +138,28 @@ while ($fila = $res_sen->fetch_assoc()) {
     <h3>Sensor #<?=$fila["id"]?> - <?=$fila["tipo"]?></h3> 
     <?php $id = $fila["id"]; ?>
     <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle"
+      <button class="btn btn-outline-primary dropdown-toggle"
               id="dropdownMenuLink<?= $id ?>"
               data-bs-toggle="dropdown"
               aria-expanded="false">
-        Opciones
+        Gráfica
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink<?= $id ?>">
         <?php if ($fila["id"] == 1) { ?>
-        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Line</a>
-        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'progress')">Progress</a>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Linea</a>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'progress')">Progreso</a>
         <?php } ?>
         <?php if ($fila["id"] == 2) { ?>
-        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Line</a>
-        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'bar')">Bar</a>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Linea</a>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'bar')">Barra</a>
         <?php } ?>
         <?php if ($fila["id"] == 3) { ?>
-        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Line</a>
-        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'progress')">Progress</a>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Linea</a>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'progress')">Progreso</a>
         <?php } ?>
         <?php if ($fila["id"] == 4) { ?>
-        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Line</a>
-        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'gauge')">Gauge</a>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'line')">Linea</a>
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); setChartType(<?= $fila['id'] ?>,'gauge')">Medidor</a>
         <?php } ?>
       </ul>
     </div>
@@ -170,7 +231,16 @@ while ($fila = $res_sen->fetch_assoc()) {
                     <div>
                         <div><?=$fila["tipo"]?></div>
                     </div>
-                    <label class="small" id="act<?=$fila["id"]?>_state">OFFLINE</label>
+                    <?php if ($fila["estado"] == 0) {?>
+                    <div class="toggle" style="margin-right: 150px;">
+                        <label class="small" id="act<?=$fila["id"]?>_state">OFFLINE</label>
+                    </div>
+                    <?php } ?>
+                    <?php if ($fila["estado"] == 1) {?>
+                    <div class="toggle" style="margin-right: 175px;">
+                        <label class="small" id="act<?=$fila["id"]?>_state">ONLINE</label>
+                    </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -188,6 +258,7 @@ user = "admin";
 function changeuser()
 {
     document.getElementById(user + "View").style.display = "none";
+    document.getElementById(user + "ViewLayout").style.display = "none";
     if (user == "admin")
     {
         user = "user";
@@ -197,9 +268,11 @@ function changeuser()
         user = "admin";
     }
     document.getElementById(user + "View").style.display = "block";
+    document.getElementById(user + "ViewLayout").style.display = "block";
 }
 
 document.getElementById(user + "View").style.display = "block";
+document.getElementById(user + "ViewLayout").style.display = "block";
 
 const charts = {};
 const histories = {};
@@ -509,7 +582,14 @@ async function fetchSensorsLongPolling(){
             const valueEl = document.getElementById('sensor' + id + '_value');
             const updateEl = document.getElementById('sensor' + id + '_update');
 
-            if (valueEl) valueEl.textContent = s.valor + ' ' + (s.unidades || '');
+            if (id == 4)
+            {
+                if (valueEl) valueEl.textContent = s.unidades + ' #' + (s.valor || '');
+            }
+            else
+            {
+                if (valueEl) valueEl.textContent = s.valor + ' ' + (s.unidades || '');
+            }
             if (updateEl) updateEl.textContent = 'Última actualiz.: ' + new Date(s.ultima_act).toLocaleTimeString();
 
             // ⭐ NEW PART — Update color dynamically:

@@ -18,11 +18,8 @@
     <body>
         <?php include "layout.php"; ?>
         <div class = "container text-center">
-            <div class="col mb-1">
+            <div class="col mb-1" style="margin-bottom:30px;">
                 <h1>Invernaderos</h1>
-            </div>
-            <div class="col mb-12" style="margin-left: 1100px; margin-bottom: 15px;">
-                <a href="(archivo).php" class="btn btn-outline-success">Nuevo Invernadero</a>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -30,10 +27,9 @@
                 <table class="table table-responsive table-bordered">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
+                            <th scope="col">#</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Ubicación</th>
-                            <th scope="col">Opciones</th>
+                            <th scope="col">Tipo    </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,20 +38,6 @@
                             <td><?=$fila["id"]?></td>
                             <td><?=$fila["nombre"]?></td>
                             <td><?=$fila["ubicacion"]?></td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <a href="(archivo).php?id=<?=$fila['id']?>" class="btn btn-outline-primary">Editar</a>
-                                    <div class="dropdown">
-                                        <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Crear
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="(archivo).php?id=<?=$fila['id']?>">Placeholder</a></li>
-                                        </ul>
-                                    </div>
-                                    <a href="(archivo).php?id=<?=$fila['id']?>" class="btn btn-outline-danger">Eliminar</a>
-                                </div>
-                            </td>
                         </tr>
                         <?php } ?>
                     </tbody>

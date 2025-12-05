@@ -3,3 +3,5 @@
 [29-Nov-2025 22:50:20 Europe/Berlin] Exception in get_sensors.php: Table 'invernatec.sensores' doesn't exist
 [01-Dec-2025 07:15:12 Europe/Berlin] Exception in get_sensors.php: MySQL server has gone away
 [03-Dec-2025 05:48:09 Europe/Berlin] Exception in get_sensors.php: MySQL server has gone away
+[04-Dec-2025 20:31:42 Europe/Berlin] Exception in get_sensors.php: MySQL server has gone away
+[04-Dec-2025 22:45:31 Europe/Berlin] Exception in get_sensors.php: MySQL server has gone away
